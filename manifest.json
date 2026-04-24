@@ -1,0 +1,12 @@
+{
+  "display_name": "Maia Voice",
+  "loading_order": 100,
+  "requires": [],
+  "optional": ["TTS"],
+  "js": "index.js",
+  "css": "style.css",
+  "author": "Maia",
+  "version": "0.1.0",
+  "homePage": "https://maia.sh",
+  "auto_update": true
+}

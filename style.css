@@ -1,0 +1,61 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Scoped to .maia-voice-settings — rides on top of SillyTavern's CSS variables
+ * so the panel inherits the active theme (--SmartThemeBodyColor etc.).
+ */
+
+.maia-voice-settings .text_pole,
+.maia-voice-settings select.text_pole {
+  width: 100%;
+}
+
+.maia-voice-settings label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.maia-voice-settings small.maia-faint {
+  display: block;
+  margin-top: 4px;
+  opacity: 0.7;
+  font-size: 0.85em;
+}
+
+.maia-voice-settings .maia-key-row {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.maia-voice-settings .maia-key-row .text_pole {
+  flex: 1 1 auto;
+}
+
+.maia-voice-settings #maia-test-conn {
+  margin-top: 12px;
+}
+
+.maia-voice-settings .maia-status {
+  margin-top: 8px;
+  min-height: 1.4em;
+  padding: 6px 8px;
+  font-size: 0.85em;
+  border-left: 3px solid transparent;
+}
+
+.maia-voice-settings .maia-status.ok {
+  border-left-color: #4ade80;
+  color: #4ade80;
+}
+
+.maia-voice-settings .maia-status.err {
+  border-left-color: #f87171;
+  color: #f87171;
+}
+
+.maia-voice-settings hr {
+  margin: 14px 0;
+  border: none;
+  border-top: 1px solid rgba(127, 127, 127, 0.25);
+}
