@@ -4,6 +4,7 @@
 
 import {
   extension_settings,
+  getContext,
   renderExtensionTemplateAsync,
 } from "../../../extensions.js";
 import {
@@ -11,6 +12,11 @@ import {
   eventSource,
   event_types,
 } from "../../../../script.js";
+import {
+  PlaybackQueue,
+  requestVoicedAudio,
+  sanitizeForSpeech,
+} from "./voiced.js";
 
 const MODULE = "maia_voice";
 const DEFAULT_BASE_URL = "https://api.maia.sh";
@@ -60,6 +66,24 @@ function setStatus(message, kind /* "ok" | "err" | "" */) {
   el.classList.remove("ok", "err");
   if (kind) el.classList.add(kind);
 }
+
+let _statusClearTimer = 0;
+function setTransientStatus(message, kind, holdMs = 6000) {
+  setStatus(message, kind);
+  if (_statusClearTimer) clearTimeout(_statusClearTimer);
+  _statusClearTimer = setTimeout(() => setStatus("", ""), holdMs);
+}
+
+// Module-scoped playback queue. Lazy: created on first use so module load
+// inside a non-DOM context (e.g. the parse harness) doesn't error.
+const queue = new PlaybackQueue();
+
+// Track the last-spoken text per messageId. Storing the text (not just the id)
+// makes dedup robust against ST's two annoying cases:
+//   1. Edit message → same id, different text → re-speak.
+//   2. Delete + new message lands at same index → different text → re-speak.
+// A pure id-set would silently skip both. Cleared when settings.enabled flips.
+const lastSpokenByMessageId = new Map();
 
 async function fetchStarters() {
   const s = settings();
@@ -138,6 +162,12 @@ function bindHandlers() {
   $("maia-enabled").checked = !!s.enabled;
   $("maia-enabled").addEventListener("change", (e) => {
     s.enabled = e.target.checked;
+    if (!s.enabled) {
+      // Flipping off should also stop anything mid-playback and reset the
+      // dedup map so re-enabling later doesn't refuse to speak old messages.
+      queue.stop();
+      lastSpokenByMessageId.clear();
+    }
     saveSettingsDebounced();
   });
 
@@ -178,6 +208,23 @@ function bindHandlers() {
     saveSettingsDebounced();
   });
 
+  $("maia-stop-playback").addEventListener("click", () => {
+    queue.stop();
+  });
+
+  // Reflect "now playing" state into the small status pill below the button.
+  queue.onChange((label) => {
+    const el = $("maia-now-playing");
+    if (!el) return;
+    if (label) {
+      el.textContent = `Now playing: ${label}`;
+      el.classList.add("active");
+    } else {
+      el.textContent = "";
+      el.classList.remove("active");
+    }
+  });
+
   $("maia-test-conn").addEventListener("click", async () => {
     setStatus("Connecting…", "");
     try {
@@ -190,6 +237,56 @@ function bindHandlers() {
       setStatus(`Failed: ${err?.message ?? err}`, "err");
     }
   });
+}
+
+async function onCharacterMessageRendered(messageId) {
+  const s = settings();
+  if (!s.enabled) return;
+  if (!s.apiKey || !s.persona) return;
+
+  let chatItem;
+  try {
+    chatItem = getContext()?.chat?.[messageId];
+  } catch (err) {
+    console.warn("[maia-voice] could not read chat item:", err);
+    return;
+  }
+  if (!chatItem || chatItem.is_user) return;
+  // System / narration messages aren't character voice.
+  if (chatItem.is_system) return;
+
+  const raw = chatItem.mes ?? chatItem.message ?? "";
+  const clean = sanitizeForSpeech(raw);
+  if (!clean) return;
+
+  // Dedup on cleaned text — handles edits and index-reuse-after-deletion that
+  // an id-only Set would silently miss.
+  if (lastSpokenByMessageId.get(messageId) === clean) return;
+  lastSpokenByMessageId.set(messageId, clean);
+
+  const scene = {};
+  if (s.sceneFormat) scene.format = s.sceneFormat;
+  if (s.sceneDialogueAct) scene.dialogue_act = s.sceneDialogueAct;
+
+  try {
+    const blob = await requestVoicedAudio({
+      baseUrl: s.baseUrl,
+      apiKey: s.apiKey,
+      persona: s.persona,
+      ...(Object.keys(scene).length ? { scene } : {}),
+      ...(s.voice ? { voice: s.voice } : {}),
+      input: clean,
+    });
+    const label = s.persona.split("/")[1] ?? s.persona;
+    queue.enqueue(blob, label);
+  } catch (err) {
+    // Failures must never block ST's chat — log + transient banner only.
+    console.warn("[maia-voice] generate failed:", err);
+    setTransientStatus(`Voiced failed: ${err?.message ?? err}`, "err");
+    // Don't keep the dedup mark if the call failed — user may want to retry
+    // via swipe/edit.
+    lastSpokenByMessageId.delete(messageId);
+  }
 }
 
 async function loadSettingsHtml() {
@@ -227,6 +324,15 @@ async function init() {
   // Render whatever we cached previously so the dropdown isn't empty if the
   // API is briefly unreachable on this load.
   if (s._cachedStarters?.length) populatePersonaSelect(s._cachedStarters);
+
+  // Wire the chat-pipeline hook. ST fires CHARACTER_MESSAGE_RENDERED after
+  // the assistant message has fully rendered; we use the message id (an
+  // integer index into chat[]) to dedup re-renders (swipes, edits).
+  if (eventSource && event_types?.CHARACTER_MESSAGE_RENDERED) {
+    eventSource.on(event_types.CHARACTER_MESSAGE_RENDERED, onCharacterMessageRendered);
+  } else {
+    console.warn("[maia-voice] CHARACTER_MESSAGE_RENDERED not exposed; chat hook disabled");
+  }
 
   // Background reconcile: if we have a key, refresh the starter list and clear
   // any stored persona that no longer exists upstream.

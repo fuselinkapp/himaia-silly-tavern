@@ -59,3 +59,16 @@
   border: none;
   border-top: 1px solid rgba(127, 127, 127, 0.25);
 }
+
+.maia-voice-settings .maia-now-playing {
+  margin-top: 6px;
+  min-height: 1.4em;
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+.maia-voice-settings .maia-now-playing.active {
+  opacity: 1;
+  color: #4ade80;
+}
+
