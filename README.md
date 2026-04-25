@@ -23,7 +23,7 @@ git clone https://github.com/maia-voice/silly-tavern.git maia-voice
 ```
 
 Restart SillyTavern, open **Extensions → Maia Voice**, paste an API key
-(grab one from the [dashboard](https://maia.sh/dashboard/keys)), pick a
+(grab one from the [dashboard](https://himaia.dev/dashboard/keys)), pick a
 persona, hit **Test connection**.
 
 ## How it works
@@ -31,7 +31,7 @@ persona, hit **Test connection**.
 The extension is a thin client of the Maia Voice HTTP API:
 
 - `GET /v1/personas` — returns the 8 starter personas (Apache-2.0,
-  forkable; see the [voice.persona spec](https://maia.sh/docs)).
+  forkable; see the [voice.persona spec](https://himaia.dev/docs)).
 - `POST /v1/generate` (bet1.8) — sends a chat reply with `mode: "voiced"`,
   receives WAV audio, plays it inline.
 
@@ -42,7 +42,7 @@ the Maia API; SillyTavern's server proxies nothing.
 
 | Field | What it does |
 |---|---|
-| **Base URL** | `https://api.maia.sh` by default. Point at your own deployment if you self-host. |
+| **Base URL** | `https://api.himaia.dev` by default. Point at your own deployment if you self-host. |
 | **API key** | Bearer token. Stored in SillyTavern's extension settings (browser-local). |
 | **Persona** | One of the 8 starters: warm_confidant, skeptical_buyer, sarcastic_narrator, anxious_npc, measured_diplomat, tender_parent, dry_butler, manic_sports_caster. |
 | **Scene · format** | `comfort`, `challenge`, `banter`, `celebrate` — depends on the persona. Falls back to the persona's default. |
@@ -59,7 +59,7 @@ is never auto-included; redact what you don't want public.
 
 ## License
 
-Apache-2.0. See `LICENSE`. Made by [Maia](https://maia.sh).
+Apache-2.0. See `LICENSE`. Made by [Maia](https://himaia.dev).
 The `voice.persona` spec the personas are written in is also
 Apache-2.0 and lives at
 [github.com/maia-voice/voice-persona](https://github.com/maia-voice/voice-persona).

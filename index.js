@@ -31,7 +31,7 @@ const MAX_INPUT_CHARS = 5000;
 const MIN_INPUT_CHARS = 2;
 
 const MODULE = "maia_voice";
-const DEFAULT_BASE_URL = "https://api.maia.sh";
+const DEFAULT_BASE_URL = "https://api.himaia.dev";
 
 // Derive the third-party folder name from this module's URL so renaming the
 // install dir (e.g. during the bet1.10 extraction) doesn't silently break the

@@ -39,7 +39,7 @@ export async function requestVoicedAudio(args) {
   if (!persona) throw new Error("no persona selected");
   if (!input?.trim()) throw new Error("empty input");
 
-  const base = (baseUrl || "https://api.maia.sh").replace(/\/$/, "");
+  const base = (baseUrl || "https://api.himaia.dev").replace(/\/$/, "");
   const body = {
     mode: "voiced",
     persona,
