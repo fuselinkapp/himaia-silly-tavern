@@ -2,7 +2,7 @@
 
 ## 0.1.0 — alpha (initial release)
 
-First public release. Built across bet1.7–1.9 of the Maia Bet 1 plan.
+First public release. Built across bet1.7–1.9 of the himaia Bet 1 plan.
 Treat as alpha: a power-user community will find bugs the author didn't.
 
 **Settings panel.** API key (with show/hide), base URL, persona dropdown
@@ -21,21 +21,21 @@ than reject, cap queue depth at 3 (with a "Queue full" banner above
 that), runtime scene-compatibility backstop that drops a stale stored
 format/dialogue_act when the picked persona doesn't define it.
 
-**Debug logger.** Three switches (settings checkbox, `window.MAIA_DEV`,
-`localStorage.MAIA_DEV`). Length-only, never logs message content. The
+**Debug logger.** Three switches (settings checkbox, `window.HIMAIA_DEV`,
+`localStorage.HIMAIA_DEV`). Length-only, never logs message content. The
 response-header allow-list explicitly excludes `x-maia-script` and
 `x-maia-thoughts-*` so a screenshare doesn't leak chat content.
 
 **Privacy.** API key lives in SillyTavern's `extension_settings` (browser-
 local). Audio data is never persisted by the extension. Calls go
-directly from the user's browser to the Maia API; SillyTavern's server
+directly from the user's browser to the himaia API; SillyTavern's server
 proxies nothing.
 
 ### Known gaps
 
 - Streaming TTS not yet supported (the API returns full WAV today; the
   fetch wrapper has an unused `onChunk` seam for when streaming lands).
-- Per-character persona binding (different ST character → different Maia
+- Per-character persona binding (different ST character → different himaia
   persona) is not yet implemented; one global persona for now.
-- 8-voice short list in the picker; the full Maia voice catalog will be
+- 8-voice short list in the picker; the full himaia voice catalog will be
   exposed when `/v1/voices` ships.

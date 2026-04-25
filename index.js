@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Maia Voice — SillyTavern extension scaffold (bet1.7).
+// himaia voice — SillyTavern extension scaffold (bet1.7).
 // Settings panel only; chat-pipeline integration lands in bet1.8.
 
 import {
@@ -30,7 +30,7 @@ const MAX_QUEUE_DEPTH = 3;
 const MAX_INPUT_CHARS = 5000;
 const MIN_INPUT_CHARS = 2;
 
-const MODULE = "maia_voice";
+const MODULE = "himaia";
 const DEFAULT_BASE_URL = "https://api.himaia.dev";
 
 // Derive the third-party folder name from this module's URL so renaming the
@@ -268,7 +268,7 @@ async function onCharacterMessageRendered(messageId) {
   try {
     chatItem = getContext()?.chat?.[messageId];
   } catch (err) {
-    console.warn("[maia-voice] could not read chat item:", err);
+    console.warn("[himaia] could not read chat item:", err);
     return;
   }
   if (!chatItem || chatItem.is_user) return;
@@ -280,7 +280,7 @@ async function onCharacterMessageRendered(messageId) {
   if (clean.length < MIN_INPUT_CHARS) return;
   if (clean.length > MAX_INPUT_CHARS) {
     clean = clean.slice(0, MAX_INPUT_CHARS - 1) + "…";
-    if (isDebug()) console.warn("[maia-voice] input truncated to", MAX_INPUT_CHARS);
+    if (isDebug()) console.warn("[himaia] input truncated to", MAX_INPUT_CHARS);
   }
 
   // Dedup on cleaned text — handles edits and index-reuse-after-deletion that
@@ -353,7 +353,7 @@ async function onCharacterMessageRendered(messageId) {
     queue.enqueue(result.blob, label);
   } catch (err) {
     // Failures must never block ST's chat — log + transient banner only.
-    console.warn("[maia-voice] generate failed:", err);
+    console.warn("[himaia] generate failed:", err);
     setTransientStatus(`Voiced failed: ${err?.message ?? err}`, "err");
     // Don't keep the dedup mark if the call failed — user may want to retry
     // via swipe/edit.
@@ -375,7 +375,7 @@ async function init() {
   try {
     html = await loadSettingsHtml();
   } catch (err) {
-    console.error("[maia-voice] failed to load settings template:", err);
+    console.error("[himaia] failed to load settings template:", err);
     return;
   }
 
@@ -387,7 +387,7 @@ async function init() {
     document.getElementById("extensions_settings2") ??
     document.getElementById("extensions_settings");
   if (!target) {
-    console.warn("[maia-voice] extensions settings container not found");
+    console.warn("[himaia] extensions settings container not found");
     return;
   }
   target.insertAdjacentHTML("beforeend", html);
@@ -404,7 +404,7 @@ async function init() {
   if (eventSource && event_types?.CHARACTER_MESSAGE_RENDERED) {
     eventSource.on(event_types.CHARACTER_MESSAGE_RENDERED, onCharacterMessageRendered);
   } else {
-    console.warn("[maia-voice] CHARACTER_MESSAGE_RENDERED not exposed; chat hook disabled");
+    console.warn("[himaia] CHARACTER_MESSAGE_RENDERED not exposed; chat hook disabled");
   }
 
   // Background reconcile: if we have a key, refresh the starter list and clear
@@ -424,7 +424,7 @@ async function init() {
       })
       .catch((err) => {
         // Silent on init — surface only if the user hits "Test connection".
-        console.debug("[maia-voice] background starter refresh failed:", err);
+        console.debug("[himaia] background starter refresh failed:", err);
       });
   }
 }
@@ -434,10 +434,10 @@ async function init() {
 // if the event has already fired by the time this module loads.
 if (eventSource && event_types?.APP_READY) {
   eventSource.on(event_types.APP_READY, () => {
-    init().catch((err) => console.error("[maia-voice] init failed:", err));
+    init().catch((err) => console.error("[himaia] init failed:", err));
   });
 } else {
-  init().catch((err) => console.error("[maia-voice] init failed:", err));
+  init().catch((err) => console.error("[himaia] init failed:", err));
 }
 
 export { settings, fetchStarters };

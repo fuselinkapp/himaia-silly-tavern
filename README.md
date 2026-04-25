@@ -1,10 +1,10 @@
-# Maia Voice — SillyTavern extension
+# himaia voice — SillyTavern extension
 
 > Give your characters a voice that stays in character.
 
-A SillyTavern third-party extension that connects to the Maia Voice API. You
+A SillyTavern third-party extension that connects to the himaia voice API. You
 pick a persona (with a point of view, an idiolect, a scene-aware delivery)
-and Maia turns chat replies into in-character spoken audio.
+and himaia turns chat replies into in-character spoken audio.
 
 ## Status
 
@@ -19,16 +19,16 @@ Treat as alpha; please file the bugs you find.
 
 ```bash
 cd /path/to/SillyTavern/public/scripts/extensions/third-party
-git clone https://github.com/fuselinkapp/maia-silly-tavern.git maia-voice
+git clone https://github.com/fuselinkapp/himaia-silly-tavern.git maia-voice
 ```
 
-Restart SillyTavern, open **Extensions → Maia Voice**, paste an API key
+Restart SillyTavern, open **Extensions → himaia voice**, paste an API key
 (grab one from the [dashboard](https://himaia.dev/dashboard/keys)), pick a
 persona, hit **Test connection**.
 
 ## How it works
 
-The extension is a thin client of the Maia Voice HTTP API:
+The extension is a thin client of the himaia voice HTTP API:
 
 - `GET /v1/personas` — returns the 8 starter personas (Apache-2.0,
   forkable; see the [voice.persona spec](https://himaia.dev/docs)).
@@ -36,7 +36,7 @@ The extension is a thin client of the Maia Voice HTTP API:
   receives WAV audio, plays it inline.
 
 Your API key never leaves your browser. The extension talks directly to
-the Maia API; SillyTavern's server proxies nothing.
+the himaia API; SillyTavern's server proxies nothing.
 
 ## Settings
 
@@ -52,14 +52,14 @@ the Maia API; SillyTavern's server proxies nothing.
 ## Reporting issues
 
 Please file bugs at
-[github.com/fuselinkapp/maia-silly-tavern/issues](https://github.com/fuselinkapp/maia-silly-tavern/issues).
+[github.com/fuselinkapp/himaia-silly-tavern/issues](https://github.com/fuselinkapp/himaia-silly-tavern/issues).
 Include your SillyTavern version, the persona you picked, and (if debug
-logging was on) the relevant `[maia-voice]` console output. Message content
+logging was on) the relevant `[himaia]` console output. Message content
 is never auto-included; redact what you don't want public.
 
 ## License
 
-Apache-2.0. See `LICENSE`. Made by [Maia](https://himaia.dev).
+Apache-2.0. See `LICENSE`. Made by [himaia](https://himaia.dev).
 The `voice.persona` spec the personas are written in is also
 Apache-2.0 and lives at
-[github.com/fuselinkapp/maia-voice-persona](https://github.com/fuselinkapp/maia-voice-persona).
+[github.com/fuselinkapp/himaia-voice-persona](https://github.com/fuselinkapp/himaia-voice-persona).

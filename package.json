@@ -2,7 +2,7 @@
   "name": "@maia/silly-tavern",
   "version": "0.1.0",
   "private": true,
-  "description": "Maia Voice extension for SillyTavern. Ships as static files — no build step.",
+  "description": "himaia voice extension for SillyTavern. Ships as static files — no build step.",
   "license": "Apache-2.0",
   "type": "module"
 }

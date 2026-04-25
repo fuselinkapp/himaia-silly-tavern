@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Voiced-tier client + audio queue for the Maia ST extension (bet1.8).
+// Voiced-tier client + audio queue for the himaia ST extension (bet1.8).
 //
 // Three responsibilities, kept tiny:
 //   1. requestVoicedAudio  — fetch /v1/generate {mode: "voiced"} → audio Blob
@@ -15,7 +15,7 @@
  * @typedef RequestVoicedArgs
  * @property {string} baseUrl
  * @property {string} apiKey
- * @property {string} persona             "maia/<slug>" (with optional @version)
+ * @property {string} persona             "himaia/<slug>" (with optional @version)
  * @property {{format?: string, dialogue_act?: string}} [scene]
  * @property {string} [voice]
  * @property {string} input
@@ -142,7 +142,7 @@ export class PlaybackQueue {
     this._audio = audio;
     this._notify();
     audio.play().catch((err) => {
-      console.warn("[maia-voice] audio play failed:", err);
+      console.warn("[himaia] audio play failed:", err);
       this._cleanup(audio);
     });
   }
@@ -169,7 +169,7 @@ export class PlaybackQueue {
       try {
         fn(this.current());
       } catch (err) {
-        console.warn("[maia-voice] queue listener threw:", err);
+        console.warn("[himaia] queue listener threw:", err);
       }
     }
   }

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
-// Debug logger for the Maia ST extension. Three switches because power users
+// Debug logger for the himaia ST extension. Three switches because power users
 // reach for whichever they remember:
-//   - extension_settings.maia_voice.debug (settings checkbox)
-//   - window.MAIA_DEV === true            (paste-into-console)
-//   - localStorage.MAIA_DEV === "1"       (survives reload)
+//   - extension_settings.himaia.debug (settings checkbox)
+//   - window.HIMAIA_DEV === true            (paste-into-console)
+//   - localStorage.HIMAIA_DEV === "1"       (survives reload)
 //
 // Logs are intentionally length-only — no message payload — so a screenshare
 // of DevTools doesn't leak chat content.
@@ -17,8 +17,8 @@ export function bindSettings(s) {
 export function isDebug() {
   if (_settingsRef?.debug) return true;
   try {
-    if (typeof window !== "undefined" && window.MAIA_DEV === true) return true;
-    if (typeof localStorage !== "undefined" && localStorage.getItem("MAIA_DEV") === "1") {
+    if (typeof window !== "undefined" && window.HIMAIA_DEV === true) return true;
+    if (typeof localStorage !== "undefined" && localStorage.getItem("HIMAIA_DEV") === "1") {
       return true;
     }
   } catch {
@@ -29,7 +29,7 @@ export function isDebug() {
 
 function group(label, fn) {
   if (!isDebug()) return;
-  console.groupCollapsed(`[maia-voice] ${label}`);
+  console.groupCollapsed(`[himaia] ${label}`);
   try {
     fn();
   } finally {
@@ -75,7 +75,7 @@ export function logResponse({ status, ms, audioBytes, headers }) {
 
 export function logQueue({ depth, currentLabel }) {
   if (!isDebug()) return;
-  console.log(`[maia-voice] queue · depth=${depth} · now=${currentLabel ?? "(idle)"}`);
+  console.log(`[himaia] queue · depth=${depth} · now=${currentLabel ?? "(idle)"}`);
 }
 
 export function logSceneIncompatibility({ persona, requested, allowed }) {
