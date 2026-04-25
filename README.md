@@ -19,7 +19,7 @@ Treat as alpha; please file the bugs you find.
 
 ```bash
 cd /path/to/SillyTavern/public/scripts/extensions/third-party
-git clone https://github.com/maia-voice/silly-tavern.git maia-voice
+git clone https://github.com/fuselinkapp/maia-silly-tavern.git maia-voice
 ```
 
 Restart SillyTavern, open **Extensions → Maia Voice**, paste an API key
@@ -52,7 +52,7 @@ the Maia API; SillyTavern's server proxies nothing.
 ## Reporting issues
 
 Please file bugs at
-[github.com/maia-voice/silly-tavern/issues](https://github.com/maia-voice/silly-tavern/issues).
+[github.com/fuselinkapp/maia-silly-tavern/issues](https://github.com/fuselinkapp/maia-silly-tavern/issues).
 Include your SillyTavern version, the persona you picked, and (if debug
 logging was on) the relevant `[maia-voice]` console output. Message content
 is never auto-included; redact what you don't want public.
@@ -62,4 +62,4 @@ is never auto-included; redact what you don't want public.
 Apache-2.0. See `LICENSE`. Made by [Maia](https://himaia.dev).
 The `voice.persona` spec the personas are written in is also
 Apache-2.0 and lives at
-[github.com/maia-voice/voice-persona](https://github.com/maia-voice/voice-persona).
+[github.com/fuselinkapp/maia-voice-persona](https://github.com/fuselinkapp/maia-voice-persona).
