@@ -8,12 +8,14 @@ and Maia turns chat replies into in-character spoken audio.
 
 ## Status
 
-**bet1.7** — settings panel only. Pick a persona and a scene, save your API
-key. Chat-pipeline integration arrives in **bet1.8**.
+`v0.1.0` — first public release. See [`CHANGELOG.md`](./CHANGELOG.md).
+Treat as alpha; please file the bugs you find.
 
-## Install (manual)
+> **If you're reading this in the maia-voice-coach monorepo before publish day,**
+> the GitHub URLs below 404 until the extraction lands. See
+> `docs/bet1/bet1.10-publish-checklist.md` for the publish steps.
 
-Until the extension lands in SillyTavern's registry (bet1.10):
+## Install
 
 ```bash
 cd /path/to/SillyTavern/public/scripts/extensions/third-party
@@ -47,13 +49,17 @@ the Maia API; SillyTavern's server proxies nothing.
 | **Scene · dialogue act** | `reassure`, `push_back`, `tease`, `witness`, `celebrate` — depends on the persona. |
 | **Voice** | Optional override. Leave blank to let the persona pick. |
 
+## Reporting issues
+
+Please file bugs at
+[github.com/maia-voice/silly-tavern/issues](https://github.com/maia-voice/silly-tavern/issues).
+Include your SillyTavern version, the persona you picked, and (if debug
+logging was on) the relevant `[maia-voice]` console output. Message content
+is never auto-included; redact what you don't want public.
+
 ## License
 
-Apache-2.0. See `LICENSE`.
-
-## Source
-
-This extension is developed in the [maia-voice-coach
-monorepo](https://github.com/oezguercelebi/maia-voice-coach) under
-`apps/silly-tavern/`. It will be extracted to a standalone repo at
-publish time (bet1.10).
+Apache-2.0. See `LICENSE`. Made by [Maia](https://maia.sh).
+The `voice.persona` spec the personas are written in is also
+Apache-2.0 and lives at
+[github.com/maia-voice/voice-persona](https://github.com/maia-voice/voice-persona).
