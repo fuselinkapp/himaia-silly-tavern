@@ -59,8 +59,15 @@
       </button>
       <div id="maia-now-playing" class="maia-now-playing" aria-live="polite"></div>
 
+      <label class="checkbox_label" for="maia-debug">
+        <input id="maia-debug" type="checkbox" />
+        <span>Debug logging (DevTools console)</span>
+      </label>
+
       <small class="maia-faint">
         Auto-plays assistant replies when enabled. Stop button drops the queue.
+        Debug logs include scene resolution, request shape, and response timings —
+        message content is never logged.
       </small>
     </div>
   </div>

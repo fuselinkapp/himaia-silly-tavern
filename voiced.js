@@ -23,8 +23,15 @@
  */
 
 /**
+ * @typedef RequestVoicedResult
+ * @property {Blob} blob
+ * @property {Headers} headers
+ * @property {number} ms
+ */
+
+/**
  * @param {RequestVoicedArgs} args
- * @returns {Promise<Blob>}
+ * @returns {Promise<RequestVoicedResult>}
  */
 export async function requestVoicedAudio(args) {
   const { baseUrl, apiKey, persona, scene, voice, input } = args;
@@ -41,6 +48,7 @@ export async function requestVoicedAudio(args) {
   if (scene && (scene.format || scene.dialogue_act)) body.scene = scene;
   if (voice) body.voice = voice;
 
+  const t0 = (typeof performance !== "undefined" ? performance.now() : Date.now());
   const res = await fetch(`${base}/v1/generate`, {
     method: "POST",
     headers: {
@@ -49,6 +57,9 @@ export async function requestVoicedAudio(args) {
     },
     body: JSON.stringify(body),
   });
+  const ms = Math.round(
+    (typeof performance !== "undefined" ? performance.now() : Date.now()) - t0,
+  );
 
   if (!res.ok) {
     let detail = "";
@@ -64,7 +75,8 @@ export async function requestVoicedAudio(args) {
   // Future: when /v1/generate supports a streaming content-type we'll iterate
   // res.body's reader here and pipe chunks to args.onChunk. Today the response
   // is a single audio/wav blob.
-  return await res.blob();
+  const blob = await res.blob();
+  return { blob, headers: res.headers, ms };
 }
 
 // ---------- Playback queue ----------
@@ -80,6 +92,11 @@ export class PlaybackQueue {
   /** Returns a label for whatever's playing now, or null. */
   current() {
     return this._audio?.dataset?.label ?? null;
+  }
+
+  /** Pending items + the one currently playing (1 if active). */
+  depth() {
+    return this._items.length + (this._audio ? 1 : 0);
   }
 
   /** Subscribe to "now playing" changes. Returns an unsubscribe fn. */

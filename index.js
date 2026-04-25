@@ -17,6 +17,18 @@ import {
   requestVoicedAudio,
   sanitizeForSpeech,
 } from "./voiced.js";
+import {
+  bindSettings as bindDebugSettings,
+  isDebug,
+  logQueue,
+  logRequest,
+  logResponse,
+  logSceneIncompatibility,
+} from "./debug.js";
+
+const MAX_QUEUE_DEPTH = 3;
+const MAX_INPUT_CHARS = 5000;
+const MIN_INPUT_CHARS = 2;
 
 const MODULE = "maia_voice";
 const DEFAULT_BASE_URL = "https://api.maia.sh";
@@ -35,6 +47,7 @@ const EXT_PATH = (() => {
 
 const DEFAULTS = Object.freeze({
   enabled: false,
+  debug: false,
   baseUrl: DEFAULT_BASE_URL,
   apiKey: "",
   persona: "",
@@ -214,6 +227,7 @@ function bindHandlers() {
 
   // Reflect "now playing" state into the small status pill below the button.
   queue.onChange((label) => {
+    logQueue({ depth: queue.depth(), currentLabel: label });
     const el = $("maia-now-playing");
     if (!el) return;
     if (label) {
@@ -223,6 +237,12 @@ function bindHandlers() {
       el.textContent = "";
       el.classList.remove("active");
     }
+  });
+
+  $("maia-debug").checked = !!s.debug;
+  $("maia-debug").addEventListener("change", (e) => {
+    s.debug = e.target.checked;
+    saveSettingsDebounced();
   });
 
   $("maia-test-conn").addEventListener("click", async () => {
@@ -256,20 +276,66 @@ async function onCharacterMessageRendered(messageId) {
   if (chatItem.is_system) return;
 
   const raw = chatItem.mes ?? chatItem.message ?? "";
-  const clean = sanitizeForSpeech(raw);
-  if (!clean) return;
+  let clean = sanitizeForSpeech(raw);
+  if (clean.length < MIN_INPUT_CHARS) return;
+  if (clean.length > MAX_INPUT_CHARS) {
+    clean = clean.slice(0, MAX_INPUT_CHARS - 1) + "…";
+    if (isDebug()) console.warn("[maia-voice] input truncated to", MAX_INPUT_CHARS);
+  }
 
   // Dedup on cleaned text — handles edits and index-reuse-after-deletion that
   // an id-only Set would silently miss.
   if (lastSpokenByMessageId.get(messageId) === clean) return;
   lastSpokenByMessageId.set(messageId, clean);
 
+  // Backstop: if a stored scene field references something the picked persona
+  // doesn't define, drop it. Settings UI keeps these in sync, but the runtime
+  // check guards a stale persona-switch in flight.
+  const persona = s._cachedStarters.find?.((x) => x.id === s.persona);
   const scene = {};
-  if (s.sceneFormat) scene.format = s.sceneFormat;
-  if (s.sceneDialogueAct) scene.dialogue_act = s.sceneDialogueAct;
+  if (s.sceneFormat) {
+    if (persona && !persona.scene_formats?.includes(s.sceneFormat)) {
+      logSceneIncompatibility({
+        persona: s.persona,
+        requested: { format: s.sceneFormat },
+        allowed: persona.scene_formats ?? [],
+      });
+    } else {
+      scene.format = s.sceneFormat;
+    }
+  }
+  if (s.sceneDialogueAct) {
+    if (persona && !persona.scene_dialogue_acts?.includes(s.sceneDialogueAct)) {
+      logSceneIncompatibility({
+        persona: s.persona,
+        requested: { dialogue_act: s.sceneDialogueAct },
+        allowed: persona.scene_dialogue_acts ?? [],
+      });
+    } else {
+      scene.dialogue_act = s.sceneDialogueAct;
+    }
+  }
+
+  // Drop the request if the queue is already saturated — runaway models
+  // shouldn't burn API spend on backlog. Tell the user via the status banner.
+  if (queue.depth() >= MAX_QUEUE_DEPTH) {
+    setTransientStatus(
+      `Queue full (${queue.depth()}). Hit Stop or wait.`,
+      "err",
+    );
+    lastSpokenByMessageId.delete(messageId);
+    return;
+  }
+
+  logRequest({
+    persona: s.persona,
+    scene: Object.keys(scene).length ? scene : null,
+    voice: s.voice,
+    inputLength: clean.length,
+  });
 
   try {
-    const blob = await requestVoicedAudio({
+    const result = await requestVoicedAudio({
       baseUrl: s.baseUrl,
       apiKey: s.apiKey,
       persona: s.persona,
@@ -277,8 +343,14 @@ async function onCharacterMessageRendered(messageId) {
       ...(s.voice ? { voice: s.voice } : {}),
       input: clean,
     });
+    logResponse({
+      status: 200,
+      ms: result.ms,
+      audioBytes: result.blob.size,
+      headers: result.headers,
+    });
     const label = s.persona.split("/")[1] ?? s.persona;
-    queue.enqueue(blob, label);
+    queue.enqueue(result.blob, label);
   } catch (err) {
     // Failures must never block ST's chat — log + transient banner only.
     console.warn("[maia-voice] generate failed:", err);
@@ -297,6 +369,7 @@ async function loadSettingsHtml() {
 
 async function init() {
   const s = settings();
+  bindDebugSettings(s);
 
   let html;
   try {
