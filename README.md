@@ -59,7 +59,7 @@ is never auto-included; redact what you don't want public.
 
 ## License
 
-Apache-2.0. See `LICENSE`. Made by [himaia](https://himaia.dev).
+Apache-2.0. See `LICENSE`. Made by [himaia](https://himaia.dev) · © Fuse Link Inc..
 The `voice.persona` spec the personas are written in is also
 Apache-2.0 and lives at
 [github.com/fuselinkapp/himaia-voice-persona](https://github.com/fuselinkapp/himaia-voice-persona).

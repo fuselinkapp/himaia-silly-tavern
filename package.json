@@ -1,8 +1,12 @@
 {
-  "name": "@maia/silly-tavern",
+  "name": "himaia-silly-tavern",
   "version": "0.1.0",
   "private": true,
-  "description": "himaia voice extension for SillyTavern. Ships as static files — no build step.",
+  "description": "himaia voice extension for SillyTavern. Ships as static files \u2014 no build step.",
+  "author": {
+    "name": "Fuse Link Inc.",
+    "url": "https://himaia.dev"
+  },
   "license": "Apache-2.0",
   "type": "module"
 }
