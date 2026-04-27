@@ -40,7 +40,7 @@ the himaia API; SillyTavern's server proxies nothing.
 |---|---|
 | **Base URL** | `https://api.himaia.dev` by default. Point at your own deployment if you self-host. |
 | **API key** | Bearer token. Stored in SillyTavern's extension settings (browser-local). |
-| **Persona** | One of the 8 starters: warm_confidant, skeptical_buyer, sarcastic_narrator, anxious_npc, measured_diplomat, tender_parent, dry_butler, manic_sports_caster. |
+| **Persona** | One of the 12 starters: warm_confidant, devoted_companion, tender_parent, dry_butler, anxious_npc, tavern_rogue, scheming_courtier, wandering_oracle, ancient_dragon, brash_squire, weary_gm, sarcastic_narrator. Hear them all on [/gallery](https://himaia.dev/gallery). |
 | **Scene · format** | `comfort`, `challenge`, `banter`, `celebrate` — depends on the persona. Falls back to the persona's default. |
 | **Scene · dialogue act** | `reassure`, `push_back`, `tease`, `witness`, `celebrate` — depends on the persona. |
 | **Voice** | Optional override. Leave blank to let the persona pick. |
