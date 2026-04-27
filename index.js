@@ -34,14 +34,14 @@ const MODULE = "himaia";
 const DEFAULT_BASE_URL = "https://api.himaia.dev";
 
 // Derive the third-party folder name from this module's URL so renaming the
-// install dir (e.g. during the bet1.10 extraction) doesn't silently break the
-// settings template lookup. Falls back to "maia-voice" if parsing fails.
+// install dir doesn't silently break the settings template lookup. Falls back
+// to "himaia-voice" (the README's recommended clone target) if parsing fails.
 const EXT_PATH = (() => {
   try {
     const m = import.meta.url.match(/\/scripts\/extensions\/(third-party\/[^/]+)\//);
-    return m?.[1] ?? "third-party/maia-voice";
+    return m?.[1] ?? "third-party/himaia-voice";
   } catch {
-    return "third-party/maia-voice";
+    return "third-party/himaia-voice";
   }
 })();
 
@@ -73,7 +73,7 @@ function $(id) {
 }
 
 function setStatus(message, kind /* "ok" | "err" | "" */) {
-  const el = $("maia-status");
+  const el = $("himaia-status");
   if (!el) return;
   el.textContent = message;
   el.classList.remove("ok", "err");
@@ -112,7 +112,7 @@ async function fetchStarters() {
 }
 
 function populatePersonaSelect(starters) {
-  const sel = $("maia-persona");
+  const sel = $("himaia-persona");
   if (!sel) return;
   const current = settings().persona;
   sel.innerHTML = "";
@@ -132,11 +132,11 @@ function populatePersonaSelect(starters) {
 
 function applyPersonaScenes(starters, personaId) {
   const persona = starters.find((s) => s.id === personaId);
-  const tagline = $("maia-persona-tagline");
+  const tagline = $("himaia-persona-tagline");
   if (tagline) tagline.textContent = persona?.tagline ?? "";
 
-  const fmtSel = $("maia-scene-format");
-  const actSel = $("maia-scene-act");
+  const fmtSel = $("himaia-scene-format");
+  const actSel = $("himaia-scene-act");
   if (fmtSel) {
     const current = settings().sceneFormat;
     fmtSel.innerHTML = "";
@@ -172,8 +172,8 @@ function applyPersonaScenes(starters, personaId) {
 function bindHandlers() {
   const s = settings();
 
-  $("maia-enabled").checked = !!s.enabled;
-  $("maia-enabled").addEventListener("change", (e) => {
+  $("himaia-enabled").checked = !!s.enabled;
+  $("himaia-enabled").addEventListener("change", (e) => {
     s.enabled = e.target.checked;
     if (!s.enabled) {
       // Flipping off should also stop anything mid-playback and reset the
@@ -184,51 +184,51 @@ function bindHandlers() {
     saveSettingsDebounced();
   });
 
-  $("maia-base-url").value = s.baseUrl ?? DEFAULT_BASE_URL;
-  $("maia-base-url").addEventListener("change", (e) => {
+  $("himaia-base-url").value = s.baseUrl ?? DEFAULT_BASE_URL;
+  $("himaia-base-url").addEventListener("change", (e) => {
     s.baseUrl = e.target.value.trim() || DEFAULT_BASE_URL;
     saveSettingsDebounced();
   });
 
-  $("maia-api-key").value = s.apiKey ?? "";
-  $("maia-api-key").addEventListener("change", (e) => {
+  $("himaia-api-key").value = s.apiKey ?? "";
+  $("himaia-api-key").addEventListener("change", (e) => {
     s.apiKey = e.target.value.trim();
     saveSettingsDebounced();
   });
 
-  $("maia-key-toggle").addEventListener("click", () => {
-    const input = $("maia-api-key");
+  $("himaia-key-toggle").addEventListener("click", () => {
+    const input = $("himaia-api-key");
     input.type = input.type === "password" ? "text" : "password";
   });
 
-  $("maia-voice").value = s.voice ?? "";
-  $("maia-voice").addEventListener("change", (e) => {
+  $("himaia-voice").value = s.voice ?? "";
+  $("himaia-voice").addEventListener("change", (e) => {
     s.voice = e.target.value;
     saveSettingsDebounced();
   });
 
-  $("maia-persona").addEventListener("change", (e) => {
+  $("himaia-persona").addEventListener("change", (e) => {
     s.persona = e.target.value;
     applyPersonaScenes(s._cachedStarters, s.persona);
     saveSettingsDebounced();
   });
-  $("maia-scene-format").addEventListener("change", (e) => {
+  $("himaia-scene-format").addEventListener("change", (e) => {
     s.sceneFormat = e.target.value;
     saveSettingsDebounced();
   });
-  $("maia-scene-act").addEventListener("change", (e) => {
+  $("himaia-scene-act").addEventListener("change", (e) => {
     s.sceneDialogueAct = e.target.value;
     saveSettingsDebounced();
   });
 
-  $("maia-stop-playback").addEventListener("click", () => {
+  $("himaia-stop-playback").addEventListener("click", () => {
     queue.stop();
   });
 
   // Reflect "now playing" state into the small status pill below the button.
   queue.onChange((label) => {
     logQueue({ depth: queue.depth(), currentLabel: label });
-    const el = $("maia-now-playing");
+    const el = $("himaia-now-playing");
     if (!el) return;
     if (label) {
       el.textContent = `Now playing: ${label}`;
@@ -239,13 +239,13 @@ function bindHandlers() {
     }
   });
 
-  $("maia-debug").checked = !!s.debug;
-  $("maia-debug").addEventListener("change", (e) => {
+  $("himaia-debug").checked = !!s.debug;
+  $("himaia-debug").addEventListener("change", (e) => {
     s.debug = e.target.checked;
     saveSettingsDebounced();
   });
 
-  $("maia-test-conn").addEventListener("click", async () => {
+  $("himaia-test-conn").addEventListener("click", async () => {
     setStatus("Connecting…", "");
     try {
       const starters = await fetchStarters();

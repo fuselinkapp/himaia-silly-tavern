@@ -15,28 +15,28 @@
   font-weight: 600;
 }
 
-.himaia-settings small.maia-faint {
+.himaia-settings small.himaia-faint {
   display: block;
   margin-top: 4px;
   opacity: 0.7;
   font-size: 0.85em;
 }
 
-.himaia-settings .maia-key-row {
+.himaia-settings .himaia-key-row {
   display: flex;
   gap: 6px;
   align-items: stretch;
 }
 
-.himaia-settings .maia-key-row .text_pole {
+.himaia-settings .himaia-key-row .text_pole {
   flex: 1 1 auto;
 }
 
-.himaia-settings #maia-test-conn {
+.himaia-settings #himaia-test-conn {
   margin-top: 12px;
 }
 
-.himaia-settings .maia-status {
+.himaia-settings .himaia-status {
   margin-top: 8px;
   min-height: 1.4em;
   padding: 6px 8px;
@@ -44,12 +44,12 @@
   border-left: 3px solid transparent;
 }
 
-.himaia-settings .maia-status.ok {
+.himaia-settings .himaia-status.ok {
   border-left-color: #4ade80;
   color: #4ade80;
 }
 
-.himaia-settings .maia-status.err {
+.himaia-settings .himaia-status.err {
   border-left-color: #f87171;
   color: #f87171;
 }
@@ -60,14 +60,14 @@
   border-top: 1px solid rgba(127, 127, 127, 0.25);
 }
 
-.himaia-settings .maia-now-playing {
+.himaia-settings .himaia-now-playing {
   margin-top: 6px;
   min-height: 1.4em;
   font-size: 0.85em;
   opacity: 0.7;
 }
 
-.himaia-settings .maia-now-playing.active {
+.himaia-settings .himaia-now-playing.active {
   opacity: 1;
   color: #4ade80;
 }

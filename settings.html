@@ -6,41 +6,41 @@
     </div>
     <div class="inline-drawer-content">
 
-      <label class="checkbox_label" for="maia-enabled">
-        <input id="maia-enabled" type="checkbox" />
+      <label class="checkbox_label" for="himaia-enabled">
+        <input id="himaia-enabled" type="checkbox" />
         <span>Enable himaia voice for chat replies</span>
       </label>
 
-      <label for="maia-base-url">Base URL</label>
-      <input id="maia-base-url" type="text" class="text_pole" placeholder="https://api.himaia.dev" />
+      <label for="himaia-base-url">Base URL</label>
+      <input id="himaia-base-url" type="text" class="text_pole" placeholder="https://api.himaia.dev" />
 
-      <label for="maia-api-key">API key</label>
-      <div class="maia-key-row">
-        <input id="maia-api-key" type="password" class="text_pole" placeholder="himaia_live_…" />
-        <button id="maia-key-toggle" class="menu_button" type="button" title="Show/hide">
+      <label for="himaia-api-key">API key</label>
+      <div class="himaia-key-row">
+        <input id="himaia-api-key" type="password" class="text_pole" placeholder="himaia_live_…" />
+        <button id="himaia-key-toggle" class="menu_button" type="button" title="Show/hide">
           <i class="fa-solid fa-eye"></i>
         </button>
       </div>
 
-      <button id="maia-test-conn" class="menu_button" type="button">
+      <button id="himaia-test-conn" class="menu_button" type="button">
         Test connection
       </button>
-      <div id="maia-status" class="maia-status" role="status" aria-live="polite"></div>
+      <div id="himaia-status" class="himaia-status" role="status" aria-live="polite"></div>
 
       <hr />
 
-      <label for="maia-persona">Persona</label>
-      <select id="maia-persona" class="text_pole"></select>
-      <small id="maia-persona-tagline" class="maia-faint"></small>
+      <label for="himaia-persona">Persona</label>
+      <select id="himaia-persona" class="text_pole"></select>
+      <small id="himaia-persona-tagline" class="himaia-faint"></small>
 
-      <label for="maia-scene-format">Scene · format</label>
-      <select id="maia-scene-format" class="text_pole"></select>
+      <label for="himaia-scene-format">Scene · format</label>
+      <select id="himaia-scene-format" class="text_pole"></select>
 
-      <label for="maia-scene-act">Scene · dialogue act</label>
-      <select id="maia-scene-act" class="text_pole"></select>
+      <label for="himaia-scene-act">Scene · dialogue act</label>
+      <select id="himaia-scene-act" class="text_pole"></select>
 
-      <label for="maia-voice">Voice</label>
-      <select id="maia-voice" class="text_pole">
+      <label for="himaia-voice">Voice</label>
+      <select id="himaia-voice" class="text_pole">
         <option value="">— let persona pick —</option>
         <option value="ember">Ember (warm, grounded)</option>
         <option value="nova">Nova (bright, confident)</option>
@@ -54,17 +54,17 @@
 
       <hr />
 
-      <button id="maia-stop-playback" class="menu_button" type="button">
+      <button id="himaia-stop-playback" class="menu_button" type="button">
         Stop playback
       </button>
-      <div id="maia-now-playing" class="maia-now-playing" aria-live="polite"></div>
+      <div id="himaia-now-playing" class="himaia-now-playing" aria-live="polite"></div>
 
-      <label class="checkbox_label" for="maia-debug">
-        <input id="maia-debug" type="checkbox" />
+      <label class="checkbox_label" for="himaia-debug">
+        <input id="himaia-debug" type="checkbox" />
         <span>Debug logging (DevTools console)</span>
       </label>
 
-      <small class="maia-faint">
+      <small class="himaia-faint">
         Auto-plays assistant replies when enabled. Stop button drops the queue.
         Debug logs include scene resolution, request shape, and response timings —
         message content is never logged.

@@ -11,15 +11,11 @@ and himaia turns chat replies into in-character spoken audio.
 `v0.1.0` — first public release. See [`CHANGELOG.md`](./CHANGELOG.md).
 Treat as alpha; please file the bugs you find.
 
-> **If you're reading this in the maia-voice-coach monorepo before publish day,**
-> the GitHub URLs below 404 until the extraction lands. See
-> `docs/bet1/bet1.10-publish-checklist.md` for the publish steps.
-
 ## Install
 
 ```bash
 cd /path/to/SillyTavern/public/scripts/extensions/third-party
-git clone https://github.com/fuselinkapp/himaia-silly-tavern.git maia-voice
+git clone https://github.com/fuselinkapp/himaia-silly-tavern.git himaia-voice
 ```
 
 Restart SillyTavern, open **Extensions → himaia voice**, paste an API key
