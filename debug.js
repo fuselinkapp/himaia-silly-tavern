@@ -52,18 +52,18 @@ export function logResponse({ status, ms, audioBytes, headers }) {
     console.log("ms:", ms);
     console.log("audioBytes:", audioBytes);
     if (headers) {
-      // ALLOW-LIST. Deliberately excludes x-maia-script (contains generated
-      // user-adjacent content) and x-maia-thoughts-* (model reasoning).
+      // ALLOW-LIST. Deliberately excludes x-himaia-script (contains generated
+      // user-adjacent content) and x-himaia-thoughts-* (model reasoning).
       // Add new headers here only after confirming they don't carry payload.
       const interesting = {};
       for (const k of [
-        "x-maia-call-id",
-        "x-maia-persona",
-        "x-maia-scene-format",
-        "x-maia-scene-dialogue-act",
-        "x-maia-fidelity",
-        "x-maia-seconds",
-        "x-maia-charge-cents",
+        "x-himaia-call-id",
+        "x-himaia-persona",
+        "x-himaia-scene-format",
+        "x-himaia-scene-dialogue-act",
+        "x-himaia-fidelity",
+        "x-himaia-seconds",
+        "x-himaia-charge-cents",
       ]) {
         const v = headers.get?.(k) ?? headers[k];
         if (v != null) interesting[k] = v;

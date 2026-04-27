@@ -23,8 +23,8 @@ format/dialogue_act when the picked persona doesn't define it.
 
 **Debug logger.** Three switches (settings checkbox, `window.HIMAIA_DEV`,
 `localStorage.HIMAIA_DEV`). Length-only, never logs message content. The
-response-header allow-list explicitly excludes `x-maia-script` and
-`x-maia-thoughts-*` so a screenshare doesn't leak chat content.
+response-header allow-list explicitly excludes `x-himaia-script` and
+`x-himaia-thoughts-*` so a screenshare doesn't leak chat content.
 
 **Privacy.** API key lives in SillyTavern's `extension_settings` (browser-
 local). Audio data is never persisted by the extension. Calls go
